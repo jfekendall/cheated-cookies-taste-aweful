@@ -39,7 +39,7 @@
     let afkinterval = '';
     let autoClicker = '';
     let goldenCookieInterval = '';
-
+	let br = document.createElement('br');
     let cbContainer = document.createElement('div');
     cbContainer.style.position = 'absolute';
     cbContainer.style.left = '10px';
@@ -50,72 +50,27 @@
     cbContainer.style.borderRadius = '5px';
     cbContainer.style.paddingBottom = '10px';
     
-    let br = document.createElement('br');
-    cbContainer.appendChild(br);
- 
-    let cbautoCookieClick = document.createElement('input');
-    cbautoCookieClick.id = 'cbautoCookieClick';
-    cbautoCookieClick.type = 'checkbox';
-    cbautoCookieClick.addEventListener('change', autoCookieClick);
-    cbContainer.appendChild(cbautoCookieClick);
-    let lblautoCookieClick = document.createElement('label');
-    lblautoCookieClick.htmlFor = 'cbautoCookieClick';
-    lblautoCookieClick.innerText = 'Auto click Cookie';
-    cbContainer.appendChild(lblautoCookieClick);
+    let checkboxes = [
+    	['cbxautoCookieClick', autoCookieClick, 'Auto click Cookie'],
+    	['cbxGoldenCookie', goldenCookieClick, 'Click Golden Cookie'],
+    	['cbxautoBuyBuildings', autoBuyBuildings, 'Auto buy buildings'],
+    	['cbxautoBuyUpgrades', autoBuyUpgrades, 'Auto buy upgrades'],
+    	['cbxafk', afk, 'AFK']
+    ];
 
-    br = document.createElement('br');
-    cbContainer.appendChild(br);
-
-    let cbxGoldenCookie = document.createElement('input');
-    cbxGoldenCookie.id = 'cbxGoldenCookie';
-    cbxGoldenCookie.type = 'checkbox';
-    cbxGoldenCookie.addEventListener('change', goldenCookieClick);
-    cbContainer.appendChild(cbxGoldenCookie);
-    let lblGoldenCookie = document.createElement('label');
-    lblGoldenCookie.htmlFor = 'cbxGoldenCookie';
-    lblGoldenCookie.innerText = 'Click Golden Cookie';
-    cbContainer.appendChild(lblGoldenCookie);
-
-    br = document.createElement('br');
-    cbContainer.appendChild(br);
- 
-    let cbautoBuyBuildings = document.createElement('input');
-    cbautoBuyBuildings.id = 'cbautoBuyBuildings';
-    cbautoBuyBuildings.type = 'checkbox';
-    cbautoBuyBuildings.addEventListener('change', autoBuyBuildings);
-    cbContainer.appendChild(cbautoBuyBuildings);
-    let lblautoBuyBuildings = document.createElement('label');
-    lblautoBuyBuildings.htmlFor = 'cbautoBuyBuildings';
-    lblautoBuyBuildings.innerText = 'Auto buy buildings';
-    cbContainer.appendChild(lblautoBuyBuildings);
- 
-    br = document.createElement('br');
-    cbContainer.appendChild(br);
- 
-    let cbautoBuyUpgrades = document.createElement('input');
-    cbautoBuyUpgrades.id = 'cbautoBuyUpgrades';
-    cbautoBuyUpgrades.type = 'checkbox';
-    cbautoBuyUpgrades.addEventListener('change', autoBuyUpgrades);
-    cbContainer.appendChild(cbautoBuyUpgrades);
-    let lblautoBuyUpgrades = document.createElement('label');
-    lblautoBuyUpgrades.htmlFor = 'cbautoBuyUpgrades';
-    lblautoBuyUpgrades.innerText = 'Auto buy upgrades';
-    cbContainer.appendChild(lblautoBuyUpgrades);
-    game.appendChild(cbContainer);
-
-    br = document.createElement('br');
-    cbContainer.appendChild(br);
- 
-    let cbafk = document.createElement('input');
-    cbafk.id = 'cbafk';
-    cbafk.type = 'checkbox';
-    cbafk.addEventListener('change', afk);
-    cbContainer.appendChild(cbafk);
-    let lblafk = document.createElement('label');
-    lblafk.htmlFor = 'cbafk';
-    lblafk.innerText = 'AFK';
-    cbContainer.appendChild(lblafk);
-    game.appendChild(cbContainer);
+    checkboxes.forEach(function(c){
+		br = document.createElement('br');
+	    cbContainer.appendChild(br);
+	    var cbx = document.createElement('input');
+	    cbx.id = c[0];
+	    cbx.type = 'checkbox';
+	    cbx.addEventListener('change', c[1]);
+	    cbContainer.appendChild(cbx);
+	    var lbl = document.createElement('label');
+	    lbl.htmlFor = 'cbx';
+	    lbl.innerText = c[2];
+	    cbContainer.appendChild(lbl);
+    });
 
     br = document.createElement('br');
     cbContainer.appendChild(br);
@@ -126,14 +81,14 @@
     numafk.addEventListener('change', afk);
     cbContainer.appendChild(numafk);
     let lblnumafk = document.createElement('label');
-    lblnumafk.htmlFor = 'cbafk';
+    lblnumafk.htmlFor = 'cbxafk';
     lblnumafk.innerText = 'AFK buying interval';
     numafk.style.width = '30px';
     cbContainer.appendChild(lblnumafk);
     game.appendChild(cbContainer);
 
     function autoCookieClick(){
-        if(cbautoCookieClick.checked){
+        if(cbxautoCookieClick.checked){
             autoClicker = setInterval(Game.ClickCookie, 25);
         }else{
             clearInterval(autoClicker);
@@ -141,7 +96,7 @@
     }
 
     function autoBuyBuildings() {
-       if(cbautoBuyBuildings.checked) {
+       if(cbxautoBuyBuildings.checked) {
             var wanted = [];
             var iterator = 0;
             p.forEach(function(e){
@@ -169,7 +124,7 @@
     }
  
     function autoBuyUpgrades() {
-        if(cbautoBuyUpgrades.checked) {
+        if(cbxautoBuyUpgrades.checked) {
             let upgrades = document.querySelectorAll('#upgrades > .upgrade.enabled');
             //Goes for the most expensive and works its way down as to maximize return.
             if(upgrades[upgrades.length-1]) {
@@ -179,7 +134,7 @@
     }
 
     function afk() {
-        if(cbafk.checked && numafk.value !== ''){
+        if(cbxafk.checked && numafk.value !== ''){
             var interval = (60000*numafk.value);
             clearInterval(afkinterval);
             afkinterval = setInterval(function(){
