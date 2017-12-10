@@ -8,13 +8,6 @@
 (function() {
     'use strict';
     
-    //Autoclick golden cookie
-    setInterval(function(){ 
-        Game.shimmers.forEach(function(shimmer) { 
-            shimmer.pop() 
-        })
-    }, 500);
-    
     //Auto-pop wrinklers
     var wrinklerClick= setInterval(function() { 
     for (var i=0;i<10;i++) { 
@@ -45,6 +38,8 @@
     let game = document.getElementById('game');
     let afkinterval = '';
     let autoClicker = '';
+    let goldenCookieInterval = '';
+
     let cbContainer = document.createElement('div');
     cbContainer.style.position = 'absolute';
     cbContainer.style.left = '10px';
@@ -67,6 +62,19 @@
     lblautoCookieClick.htmlFor = 'cbautoCookieClick';
     lblautoCookieClick.innerText = 'Auto click Cookie';
     cbContainer.appendChild(lblautoCookieClick);
+
+    br = document.createElement('br');
+    cbContainer.appendChild(br);
+
+    let cbxGoldenCookie = document.createElement('input');
+    cbxGoldenCookie.id = 'cbxGoldenCookie';
+    cbxGoldenCookie.type = 'checkbox';
+    cbxGoldenCookie.addEventListener('change', goldenCookieClick);
+    cbContainer.appendChild(cbxGoldenCookie);
+    let lblGoldenCookie = document.createElement('label');
+    lblGoldenCookie.htmlFor = 'cbxGoldenCookie';
+    lblGoldenCookie.innerText = 'Click Golden Cookie';
+    cbContainer.appendChild(lblGoldenCookie);
 
     br = document.createElement('br');
     cbContainer.appendChild(br);
@@ -205,6 +213,18 @@
         }else{
             clearInterval(afkinterval);
         }
+    }
+
+    function goldenCookieClick(){
+    	if(cbxGoldenCookie.checked){
+		    goldenCookieInterval = setInterval(function(){ 
+		        Game.shimmers.forEach(function(shimmer) { 
+		            shimmer.pop() 
+		        })
+		    }, 500);
+		}else{
+			clearInterval(goldenCookieInterval);
+		}
     }
     setInterval(() => {autoBuyBuildings();autoBuyUpgrades();}, 10);
 })();
